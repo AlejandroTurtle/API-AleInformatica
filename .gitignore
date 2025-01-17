@@ -1,0 +1,47 @@
+# Node.js
+node_modules/
+dist/
+*.log
+.env
+
+# TypeScript
+*.tsbuildinfo
+
+# Logs e relatórios de depuração
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# IDEs e editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+
+# Testes e cobertura
+coverage/
+.nyc_output/
+
+# Build tools
+build/
+tmp/
+temp/
+
+# Configurações locais
+.env.local
+.env.*.local
+
+# Docker
+docker-compose.override.yml
+
+# Outros
+*.bak
+*.old
+*.orig
