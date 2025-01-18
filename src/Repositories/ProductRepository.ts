@@ -5,6 +5,13 @@ export const findAllProducts = async (): Promise<ProductModel[]> => {
   return await Product.findAll();
 };
 
+export const getProductsBanner = async (): Promise<ProductModel[]> => {
+  return Product.findAll({
+    order: [['price', 'ASC']],
+    limit: 10,
+  });
+};
+
 export const findProductById = async (id: number): Promise<ProductModel | null> => {
   return await Product.findByPk(id);
 };

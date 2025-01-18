@@ -1,14 +1,12 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import router from './routes';
-import sequelize from '../src/db';
+import sequelize from './config/database';
 
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT;
-
-app.use(express.json());
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
@@ -17,7 +15,7 @@ sequelize
   .then(() => {
     console.log('Banco de dados sincronizado');
   })
-  .catch((error) => {
+  .catch((error: Error) => {
     console.error('Erro ao sincronizar banco de dados:', error);
   });
 

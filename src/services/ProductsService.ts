@@ -14,6 +14,18 @@ export const getProductService = async () => {
   return response;
 };
 
+export const getProductsBannerService = async () => {
+  const data = await ProductRepository.getProductsBanner();
+  let response = null;
+  if (data) {
+    response = await HttpResponse.ok(data);
+  } else {
+    response = await HttpResponse.noContent();
+  }
+
+  return response;
+};
+
 export const getProductByIdService = async (id: number) => {
   const data = await ProductRepository.findProductById(id);
   let response = null;
@@ -27,10 +39,25 @@ export const getProductByIdService = async (id: number) => {
 };
 
 export const createProductService = async (product: ProductModel) => {
-  let response = null;
-  if (Object.keys(product).length === 0) {
-    return await HttpResponse.badRequest(new Error('Insira os dados corretamente e tente novamente'));
+  const missingFields: string[] = [];
+
+  if (!product.name) missingFields.push('name');
+  if (!product.price) missingFields.push('price');
+  if (!product.description) missingFields.push('description');
+  if (!product.photo) missingFields.push('photo');
+  if (!product.category) missingFields.push('category');
+
+  if (missingFields.length > 0) {
+    return await HttpResponse.badRequest(
+      new Error(
+        `Os seguintes campos estão faltando: ${missingFields.join(
+          ', '
+        )}. Por favor, insira todos os dados e tente novamente.`
+      )
+    );
   }
+
+  let response = null;
 
   try {
     await ProductRepository.createProduct(product);
@@ -38,6 +65,7 @@ export const createProductService = async (product: ProductModel) => {
   } catch (error) {
     response = await HttpResponse.badRequest(error);
   }
+
   return response;
 };
 

@@ -1,10 +1,13 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '../db';
+import sequelize from '../config/database';
 
 class Product extends Model {
   public id!: number;
   public name!: string;
   public price!: number;
+  public description!: string;
+  public photo!: string;
+  public category!: string;
 }
 
 Product.init(
@@ -21,6 +24,18 @@ Product.init(
     price: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    photo: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    category: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
   },
   {
