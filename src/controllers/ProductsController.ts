@@ -1,14 +1,9 @@
 import { Request, Response } from 'express';
 import * as ProductService from '../services/ProductsService';
-import { upload } from '../utils/uploadConfig';
+import { uploadMultiplePhotos } from '../utils/uploadConfig';
 
 export const getProduct = async (req: Request, res: Response) => {
   const HttpResponse = await ProductService.getProductService();
-  res.status(HttpResponse.statusCode).json(HttpResponse.body);
-};
-
-export const getProductsBanner = async (req: Request, res: Response) => {
-  const HttpResponse = await ProductService.getProductsBannerService();
   res.status(HttpResponse.statusCode).json(HttpResponse.body);
 };
 
@@ -20,14 +15,18 @@ export const getProductById = async (req: Request, res: Response) => {
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    upload.single('photo')(req, res, async (err) => {
+    // O middleware de upload precisa ser invocado dessa forma
+    uploadMultiplePhotos(req, res, async (err) => {
       if (err) {
         return res.status(400).json({ error: err.message });
       }
 
+      // Acessando os arquivos com o nome correto (photos)
+      const photoUrls = (req.files as Express.Multer.File[] | undefined)?.map((file) => file.path) || [];
+
       const productData = {
         ...req.body,
-        photo: req.file?.path || null, // Cloudinary retorna a URL em req.file.path
+        photos: photoUrls, // Array de URLs
       };
 
       const HttpResponse = await ProductService.createProductService(productData);
@@ -46,7 +45,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
 
 export const updateProduct = async (req: Request, res: Response) => {
   try {
-    upload.single('photo')(req, res, async (err) => {
+    uploadMultiplePhotos(req, res, async (err) => {
       if (err) {
         return res.status(400).json({ error: err.message });
       }
@@ -54,7 +53,7 @@ export const updateProduct = async (req: Request, res: Response) => {
       const id = parseInt(req.params.id);
       const productData = {
         ...req.body,
-        photo: req.file?.path || req.body.photo, // Mantém a foto antiga se não enviar uma nova
+        photo: req.file?.path || req.body.photos,
       };
 
       const HttpResponse = await ProductService.updateProductService(id, productData);
@@ -63,4 +62,10 @@ export const updateProduct = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).json({ error: 'Erro ao atualizar produto' });
   }
+};
+
+export const getProductByCategory = async (req: Request, res: Response) => {
+  const { category } = req.body;
+  const HttpResponse = await ProductService.getProductByCategoryService(category);
+  res.status(HttpResponse.statusCode).json(HttpResponse.body);
 };

@@ -30,4 +30,6 @@ const storage = new CloudinaryStorage({
   },
 } as CloudinaryStorageParams);
 
-export const upload = multer({ storage: storage });
+export const uploadSinglePhoto = multer({ storage }).single('photo'); // Um único arquivo no campo "photo"
+
+export const uploadMultiplePhotos = multer({ storage }).array('photos', 5); // Até 5 arquivos no campo "photos"

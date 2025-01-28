@@ -6,7 +6,7 @@ class Product extends Model {
   public name!: string;
   public price!: number;
   public description!: string;
-  public photo!: string;
+  public photos!: string[];
   public category!: string;
 }
 
@@ -29,8 +29,8 @@ Product.init(
       type: DataTypes.TEXT,
       allowNull: true,
     },
-    photo: {
-      type: DataTypes.STRING,
+    photos: {
+      type: DataTypes.ARRAY(DataTypes.STRING), // Array de URLs de fotos
       allowNull: true,
     },
     category: {

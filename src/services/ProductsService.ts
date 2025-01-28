@@ -1,21 +1,10 @@
+import Banner from '../Models/BannerModel';
 import ProductModel from '../Models/ProductModel';
 import * as ProductRepository from '../Repositories/ProductRepository';
 import * as HttpResponse from '../utils/http-helper';
 
 export const getProductService = async () => {
   const data = await ProductRepository.findAllProducts();
-  let response = null;
-  if (data) {
-    response = await HttpResponse.ok(data);
-  } else {
-    response = await HttpResponse.noContent();
-  }
-
-  return response;
-};
-
-export const getProductsBannerService = async () => {
-  const data = await ProductRepository.getProductsBanner();
   let response = null;
   if (data) {
     response = await HttpResponse.ok(data);
@@ -44,7 +33,7 @@ export const createProductService = async (product: ProductModel) => {
   if (!product.name) missingFields.push('name');
   if (!product.price) missingFields.push('price');
   if (!product.description) missingFields.push('description');
-  if (!product.photo) missingFields.push('photo');
+  if (!product.photos) missingFields.push('photos');
   if (!product.category) missingFields.push('category');
 
   if (missingFields.length > 0) {
@@ -87,6 +76,17 @@ export const updateProductService = async (id: number, product: ProductModel) =>
     response = await HttpResponse.ok('Produto atualizado com sucesso');
   } catch (error) {
     response = await HttpResponse.badRequest(error);
+  }
+  return response;
+};
+
+export const getProductByCategoryService = async (category: string) => {
+  const data = await ProductRepository.getProductByCategory(category);
+  let response = null;
+  if (data) {
+    response = await HttpResponse.ok(data);
+  } else {
+    response = await HttpResponse.noContent();
   }
   return response;
 };

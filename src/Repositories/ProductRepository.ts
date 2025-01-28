@@ -1,15 +1,9 @@
+import Banner from '../Models/BannerModel';
 import ProductModel from '../Models/ProductModel';
 import Product from '../Models/ProductModel';
 
 export const findAllProducts = async (): Promise<ProductModel[]> => {
   return await Product.findAll();
-};
-
-export const getProductsBanner = async (): Promise<ProductModel[]> => {
-  return Product.findAll({
-    order: [['price', 'ASC']],
-    limit: 10,
-  });
 };
 
 export const findProductById = async (id: number): Promise<ProductModel | null> => {
@@ -38,4 +32,16 @@ export const updateProduct = async (id: number, productData: ProductModel): Prom
   }
 
   return await product.update(productData);
+};
+
+export const getProductByCategory = async (category: string): Promise<ProductModel[]> => {
+  if (category === 'Tudo') {
+    return await Product.findAll();
+  } else {
+    return await Product.findAll({
+      where: {
+        category: category,
+      },
+    });
+  }
 };
