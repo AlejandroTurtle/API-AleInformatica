@@ -50,3 +50,5 @@ docker-compose.override.yml
 *.bak
 *.old
 *.orig
+
+.vercel
