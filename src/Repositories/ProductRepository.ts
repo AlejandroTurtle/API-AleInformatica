@@ -1,11 +1,11 @@
 import Banner from '../Models/BannerModel';
 import ProductModel from '../Models/ProductModel';
 import Product from '../Models/ProductModel';
+import { Op, Sequelize } from 'sequelize';
 
 export const findAllProducts = async (): Promise<ProductModel[]> => {
   return await Product.findAll();
 };
-
 export const findProductById = async (id: number): Promise<ProductModel | null> => {
   return await Product.findByPk(id);
 };
@@ -44,4 +44,14 @@ export const getProductByCategory = async (category: string): Promise<ProductMod
       },
     });
   }
+};
+
+export const cheaperProduct = async (): Promise<ProductModel[]> => {
+  return await Product.findAll({
+    where: {
+      price: {
+        [Op.lt]: 300,
+      },
+    },
+  });
 };

@@ -69,3 +69,8 @@ export const getProductByCategory = async (req: Request, res: Response) => {
   const HttpResponse = await ProductService.getProductByCategoryService(category);
   res.status(HttpResponse.statusCode).json(HttpResponse.body);
 };
+
+export const cheaperProduct = async (req: Request, res: Response) => {
+  const HttpResponse = await ProductService.cheaperProductService();
+  res.status(HttpResponse.statusCode).json(HttpResponse.body);
+};

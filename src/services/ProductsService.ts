@@ -90,3 +90,14 @@ export const getProductByCategoryService = async (category: string) => {
   }
   return response;
 };
+
+export const cheaperProductService = async () => {
+  const data = await ProductRepository.cheaperProduct();
+  let response = null;
+  if (data) {
+    response = await HttpResponse.ok(data);
+  } else {
+    response = await HttpResponse.noContent();
+  }
+  return response;
+};
